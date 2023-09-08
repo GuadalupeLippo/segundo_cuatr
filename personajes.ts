@@ -1,99 +1,69 @@
-class Personaje{
+class Personaje {
     private nombre: string;
-    private vida: number;
-    private energia : number;
-
-    constructor(nombre: string= "" , vida: number = 3, energia: number = 20) {
-        this.nombre= nombre;
-        this.vida= vida;
-        this.energia= energia;
+    private edad: number;
+    private pais: string;
+    private movimientoEspecial: string;
+    private salud: number;
+    public nivel: number;
+  
+    constructor(nombre: string, edad: number, pais: string, movimientoEspecial: string) {
+      this.nombre = nombre;
+      this.edad = edad;
+      this.pais = pais;
+      this.movimientoEspecial = movimientoEspecial;
+      this.salud = 100;
+      this.nivel = 1;
     }
-   
-    name(name:string): void {
-        this.nombre=name;
+  
+    recibirDanio(danio: number): void {
+      this.salud -= danio;
+      console.log(`${this.nombre} recibió ${danio} puntos de daño. Salud actual: ${this.salud}`);
     }
-
-    atacar() : void {
-        this.energia= this.energia-5;
-        console.log("energia: ", this.energia)
-        if(this.energia === 0){
-            this.vida=this.vida-1;
-        console.log("Te quedan", this.vida, "vidas");
-        }         
+  
+    incrementarNivel(): void {
+      this.nivel++;
+      console.log(`${this.nombre} subió al nivel ${this.nivel}!`);
     }
-
-    curar(): void {
-    this.energia= this.energia+5;
-    console.log("energia: ",this.energia);
-    if(this.energia===20) {
-        this.vida=this.vida+1
-        console.log("conseguiste otra vida, te quedan:", this.vida);
-        
+  
+    usarMovimientoEspecial(objetivo: string): void {
+      console.log(`${this.nombre} usó ${this.movimientoEspecial} contra ${objetivo}!`);
     }
+  }
+  
+  class Enemigo {
+    private nombre: string;
+    private tipo: string;
+    private danio: number;
+    private energia: number;
+    private personaje: Personaje;
+  
+    constructor(nombre: string, tipo: string, danio: number, personaje: Personaje) {
+      this.nombre = nombre;
+      this.tipo = tipo;
+      this.danio = danio;
+      this.energia = 100;
+      this.personaje = personaje;
     }
-    
-    info(): void {
-        console.log("nombre:" ,this.nombre, "\n vidas:", this.vida, "\n energia:",this.energia);
+  
+    recibirDanio(danio: number): void {
+      this.energia -= danio;
+      console.log(`${this.nombre} recibió ${danio} puntos de daño. Energía actual: ${this.energia}`);
+      console.log(this.tipo)
     }
-    
-}
-
-class Guerrero extends Personaje {
-    private fuerza:number;
-
-    constructor(fuerza:number=50){
-        super();
-        this.fuerza=fuerza;
+  
+    atacar(): void {
+      this.personaje.recibirDanio(this.danio);
     }
-
-    usarEscudo(): void{
-        this.fuerza= this.fuerza-5;
-        console.log("fuerza:", this.fuerza);
-        
-    }
-    
-}
-
-class Mago extends Personaje {
-    private mana: number;
-    constructor (mana: number = 50) {
-        super();
-        this.mana= mana
-    }
-    lanzarHechizo(): void{
-        this.mana= this.mana-5;
-        console.log("mana:", this.mana);
-        
-        
-    } 
-
-}
-
-const mago01 = new Mago()
-console.log(mago01);
-mago01.atacar()
-mago01.atacar()
-mago01.atacar()
-mago01.atacar()
-mago01.curar()
-mago01.curar()
-mago01.name("pepe")
-mago01.info()
-mago01.lanzarHechizo()
-mago01.lanzarHechizo()
-mago01.atacar()
-mago01.atacar()
-mago01.curar()
-mago01.curar()
-mago01.curar()
-mago01.curar()
-
-
-const guerr01 = new Guerrero()
-console.log(guerr01);
-guerr01.name("gods")
-guerr01.usarEscudo()
-guerr01.usarEscudo()
-
-guerr01.info()
-
+  }
+  
+  // Crear un personaje y probar sus métodos
+  const personaje1 = new Personaje("Luchador1", 25, "Japón", "Puño de Fuego");
+  personaje1.recibirDanio(20);
+  personaje1.usarMovimientoEspecial("Enemigo1");
+  personaje1.incrementarNivel();
+  
+  // Crear un enemigo y probar sus métodos
+  const personajeEnemigo = new Personaje("Enemigo1", 30, "Mundo Oscuro", "Maldición Oscura");
+  const enemigo1 = new Enemigo("Ogro", "Fuerza Bruta", 32, personajeEnemigo);
+  enemigo1.atacar();
+  enemigo1.atacar();
