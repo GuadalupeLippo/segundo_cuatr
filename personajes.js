@@ -1,100 +1,50 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var Personaje = /** @class */ (function () {
-    function Personaje(nombre, vida, energia) {
-        if (nombre === void 0) { nombre = ""; }
-        if (vida === void 0) { vida = 3; }
-        if (energia === void 0) { energia = 20; }
+    function Personaje(nombre, edad, pais, movimientoEspecial) {
         this.nombre = nombre;
-        this.vida = vida;
-        this.energia = energia;
+        this.edad = edad;
+        this.pais = pais;
+        this.movimientoEspecial = movimientoEspecial;
+        this.salud = 100;
+        this.nivel = 1;
     }
-    Personaje.prototype.name = function (name) {
-        this.nombre = name;
+    Personaje.prototype.recibirDanio = function (danio) {
+        this.salud -= danio;
+        console.log("".concat(this.nombre, " recibi\u00F3 ").concat(danio, " puntos de da\u00F1o. Salud actual: ").concat(this.salud));
     };
-    Personaje.prototype.atacar = function () {
-        this.energia = this.energia - 5;
-        console.log("energia: ", this.energia);
-        if (this.energia === 0) {
-            this.vida = this.vida - 1;
-            console.log("Te quedan", this.vida, "vidas");
-        }
+    Personaje.prototype.incrementarNivel = function () {
+        this.nivel++;
+        console.log("".concat(this.nombre, " subi\u00F3 al nivel ").concat(this.nivel, "!"));
     };
-    Personaje.prototype.curar = function () {
-        this.energia = this.energia + 5;
-        console.log("energia: ", this.energia);
-        if (this.energia === 20) {
-            this.vida = this.vida + 1;
-            console.log("conseguiste otra vida, te quedan:", this.vida);
-        }
-    };
-    Personaje.prototype.info = function () {
-        console.log("nombre:", this.nombre, "\n vidas:", this.vida, "\n energia:", this.energia);
+    Personaje.prototype.usarMovimientoEspecial = function (objetivo) {
+        console.log("".concat(this.nombre, " us\u00F3 ").concat(this.movimientoEspecial, " contra ").concat(objetivo, "!"));
     };
     return Personaje;
 }());
-var Guerrero = /** @class */ (function (_super) {
-    __extends(Guerrero, _super);
-    function Guerrero(fuerza) {
-        if (fuerza === void 0) { fuerza = 50; }
-        var _this = _super.call(this) || this;
-        _this.fuerza = fuerza;
-        return _this;
+var Enemigo = /** @class */ (function () {
+    function Enemigo(nombre, tipo, danio, personaje) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.danio = danio;
+        this.energia = 100;
+        this.personaje = personaje;
     }
-    Guerrero.prototype.usarEscudo = function () {
-        this.fuerza = this.fuerza - 5;
-        console.log("fuerza:", this.fuerza);
+    Enemigo.prototype.recibirDanio = function (danio) {
+        this.energia -= danio;
+        console.log("".concat(this.nombre, " recibi\u00F3 ").concat(danio, " puntos de da\u00F1o. Energ\u00EDa actual: ").concat(this.energia));
+        console.log(this.tipo);
     };
-    return Guerrero;
-}(Personaje));
-var Mago = /** @class */ (function (_super) {
-    __extends(Mago, _super);
-    function Mago(mana) {
-        if (mana === void 0) { mana = 50; }
-        var _this = _super.call(this) || this;
-        _this.mana = mana;
-        return _this;
-    }
-    Mago.prototype.lanzarHechizo = function () {
-        this.mana = this.mana - 5;
-        console.log("mana:", this.mana);
+    Enemigo.prototype.atacar = function () {
+        this.personaje.recibirDanio(this.danio);
     };
-    return Mago;
-}(Personaje));
-var mago01 = new Mago();
-console.log(mago01);
-mago01.atacar();
-mago01.atacar();
-mago01.atacar();
-mago01.atacar();
-mago01.curar();
-mago01.curar();
-mago01.name("pepe");
-mago01.info();
-mago01.lanzarHechizo();
-mago01.lanzarHechizo();
-mago01.atacar();
-mago01.atacar();
-mago01.curar();
-mago01.curar();
-mago01.curar();
-mago01.curar();
-var guerr01 = new Guerrero();
-console.log(guerr01);
-guerr01.name("gods");
-guerr01.usarEscudo();
-guerr01.usarEscudo();
-guerr01.info();
+    return Enemigo;
+}());
+// Crear un personaje y probar sus métodos
+var personaje1 = new Personaje("Luchador1", 25, "Japón", "Puño de Fuego");
+personaje1.recibirDanio(20);
+personaje1.usarMovimientoEspecial("Enemigo1");
+personaje1.incrementarNivel();
+// Crear un enemigo y probar sus métodos
+var personajeEnemigo = new Personaje("Enemigo1", 30, "Mundo Oscuro", "Maldición Oscura");
+var enemigo1 = new Enemigo("Ogro", "Fuerza Bruta", 32, personajeEnemigo);
+enemigo1.atacar();
+enemigo1.atacar();
